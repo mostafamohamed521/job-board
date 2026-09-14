@@ -2,10 +2,15 @@ from django.db import models
 
 # Create your models here
 # 
-
 Job_Type =(
     ('FULL-TIME','full-time'),
     ('PART-TIME','part-time') )
+
+def image_upload (instance,filename):
+    image_name , extension = filename.split(".")
+    return "jobs/%s.%s"%(instance.title,extension)
+
+
 class Job(models.Model): # create table
     title = models.CharField(max_length=100) #column text
     job_type = models.CharField(max_length=100 ,choices= Job_Type)
@@ -15,6 +20,7 @@ class Job(models.Model): # create table
     salary= models.IntegerField(default= 0)
     experience = models.IntegerField(default=1)
     category = models.ForeignKey('Category', on_delete=models.CASCADE, null=True, blank=True)
+    image = models.ImageField(upload_to=image_upload)
 
     def __str__(self):
         return self.title
